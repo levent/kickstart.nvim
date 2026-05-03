@@ -703,6 +703,7 @@ require('lazy').setup({
       },
       -- You can also specify external formatters in here.
       formatters_by_ft = {
+        -- rust = { 'rustfmt' },
         lua = { 'stylua' },
         ruby = { 'rubyfmt' },
         -- Conform can also run multiple formatters sequentially
