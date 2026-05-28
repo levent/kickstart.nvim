@@ -99,7 +99,7 @@ do
   vim.g.maplocalleader = ' '
 
   -- Set to true if you have a Nerd Font installed and selected in the terminal
-  vim.g.have_nerd_font = false
+  vim.g.have_nerd_font = true
 
   -- [[ Setting options ]]
   --  See `:help vim.o`
@@ -400,6 +400,18 @@ do
   vim.pack.add { gh 'folke/todo-comments.nvim' }
   require('todo-comments').setup { signs = false }
 
+  -- Neogit: a Magit-style git interface for Neovim
+  vim.pack.add {
+    gh 'NeogitOrg/neogit',
+    gh 'sindrets/diffview.nvim',
+  }
+  require('neogit').setup {}
+  vim.keymap.set('n', '<leader>gg', '<cmd>Neogit<cr>', { desc = 'Show Neogit UI' })
+
+  -- Show assigned colours inline (hex codes, etc.)
+  vim.pack.add { gh 'catgoose/nvim-colorizer.lua' }
+  require('colorizer').setup {}
+
   -- [[ mini.nvim ]]
   --  A collection of various small independent plugins/modules
   vim.pack.add { gh 'nvim-mini/mini.nvim' }
@@ -690,6 +702,7 @@ do
     -- gopls = {},
     -- pyright = {},
     -- rust_analyzer = {},
+    ruby_lsp = {},
     --
     -- Some languages (like typescript) have entire language plugins that can be useful:
     --    https://github.com/pmizio/typescript-tools.nvim
@@ -791,11 +804,15 @@ do
     -- You can also specify external formatters in here.
     formatters_by_ft = {
       -- rust = { 'rustfmt' },
+      lua = { 'stylua' },
+      ruby = { 'rubyfmt' },
       -- Conform can also run multiple formatters sequentially
       -- python = { "isort", "black" },
       --
       -- You can use 'stop_after_first' to run the first available formatter from the list
       -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      -- typescript = { 'deno_fmt' },
+      -- typescriptreact = { 'deno_fmt' },
     },
   }
 
@@ -898,8 +915,30 @@ do
   vim.pack.add { { src = gh 'nvim-treesitter/nvim-treesitter', version = 'main' } }
 
   -- Ensure basic parsers are installed
-  local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+  local parsers = {
+    'bash',
+    'c',
+    'diff',
+    'html',
+    'gotmpl',
+    'lua',
+    'luadoc',
+    'markdown',
+    'markdown_inline',
+    'query',
+    'ruby',
+    'vim',
+    'vimdoc',
+    'typescript',
+    'tmpl',
+    'tsx',
+  }
   require('nvim-treesitter').install(parsers)
+  vim.filetype.add {
+    extension = {
+      tmpl = 'bash',
+    },
+  }
 
   ---@param buf integer
   ---@param language string
@@ -965,12 +1004,12 @@ do
   -- require 'kickstart.plugins.lint'
   -- require 'kickstart.plugins.autopairs'
   -- require 'kickstart.plugins.neo-tree'
-  -- require 'kickstart.plugins.gitsigns' -- adds gitsigns recommended keymaps
+  require 'kickstart.plugins.gitsigns' -- adds gitsigns recommended keymaps
 
   -- NOTE: You can add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --
   --  Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
-  -- require 'custom.plugins'
+  require 'custom.plugins'
 end
 
 -- The line beneath this is called `modeline`. See `:help modeline`
